@@ -1,6 +1,8 @@
 const express = require("express");
 const fs = require("fs");
 const cors = require("cors");
+const path = require('path');
+
 
 const app = express();
 const port = 3000;
@@ -15,9 +17,9 @@ app.use(cors(corsOptions));
 
 app.use(express.json());
 
-app.get('/imagem/:name', (req, res) => {
-  const { name } = req.params; // Nome do arquivo recebido na URL
-  const imagePath = path.join(__dirname, 'assets/images/products', name); // Caminho para o arquivo de imagem
+app.get('/images/:name', (req, res) => {
+  const { name } = req.params; 
+  const imagePath = path.join(__dirname, 'assets/images/products', name);
 
   res.sendFile(imagePath, (err) => {
     if (err) {
@@ -26,12 +28,13 @@ app.get('/imagem/:name', (req, res) => {
   });
 });
 
+
 // examplo: localhost:3000/clothes?page=0&perPage=2
 app.get("/clothes", (req, res) => {
   const page = parseInt(req.query.page) || 0;
   const perPage = parseInt(req.query.perPage) || 10;
 
-  fs.readFile("db.json", "utf8", (err, data) => {
+  fs.readFile("clothes.json", "utf8", (err, data) => {
     if (err) {
       console.log(err);
       res.status(500).send("Internal Server Error");
